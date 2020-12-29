@@ -19,8 +19,9 @@ class CreateBookLoansTable extends Migration
             $table->timestamp('due_date');
             $table->timestamp('date_in')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger("book_id");
             $table->timestamps();
-
+            $table->foreign('book_id')->references('id')->on('books');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

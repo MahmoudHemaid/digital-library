@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Book;
 use App\Models\BookLoan;
 use App\Models\Publisher;
 use App\Models\User;
@@ -28,6 +29,7 @@ class BookLoanFactory extends Factory
             "due_date" => $this->faker->dateTimeBetween("now", "+2 month"),
             'date_in' => $this->faker->boolean ? $this->faker->dateTimeBetween('now', '+2 month') : null,
             'user_id' => User::all()->random()->id,
+            'book_id' => Book::all()->random()->id,
         ];
     }
 }

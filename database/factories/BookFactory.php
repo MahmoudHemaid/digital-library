@@ -25,7 +25,7 @@ class BookFactory extends Factory
         return [
             "title" => $this->faker->sentence(4, true),
             "description" => $this->faker->sentence(3, true),
-            'location' => "الطابق الربع, الرف B003",
+            'location' => "Floor 4, Section B003",
             'number_of_copies' => $this->faker->numberBetween(0, 20),
             'date_of_publication' => $this->faker->dateTime('now'),
             'publisher_id' => Publisher::all()->random()->id,
