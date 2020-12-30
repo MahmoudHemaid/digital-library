@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+// namespace: folder name
+// prefix: url
+// name: route name
+Route::namespace('App\Http\Controllers\Dashboard')->name('dashboard.')->prefix('admin')->group(function(){
+    Route::get('/','DashboardController@index');
+    Route::resource('books','BookController');
+    Route::resource('authors','AuthorController');
+    Route::resource('categories','CategoryController');
+    Route::resource('publishers','PublisherController');
+    Route::resource('book-loans','BookLoanController');
+});
+
+Route::namespace('App\Http\Controllers\Frontsite')->name('frontsite.')->group(function(){
+    Route::view('/','frontsite.home')->name("home");
 });
