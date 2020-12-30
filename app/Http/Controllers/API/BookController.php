@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
-use App\Models\Author;
 use App\Models\BookLoan;
 use App\Models\Publisher;
-use App\Models\BookAuthor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,23 +16,15 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $books = Book::orderBy('created_at','desc')->paginate(10);
-        return view("dashboard.books.index", compact('books'));
-    }
+    public function index(){
+        $books = Book::orderBy('created_at','desc')->with("authors:id,name")->paginate(20);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        $publishers = Publisher::all();
-        $authors = Author::all();
-        return view("dashboard.books.create", compact('publishers', 'authors'));
+        return response([
+            "count" => $books->count(),
+            "limit" => 20,
+            "total" => $books->total(),
+            "data" => $books
+        ]);
     }
 
     /**
@@ -49,19 +39,20 @@ class BookController extends Controller
             'title' => 'required',
             'description' => '',
             'location' => 'nullable',
-            'number_of_copies' => 'integer',
+            'number_of_copies' => 'required',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            'authors' => 'array|nullable'
+            "authors" => 'array'
         ];
+
 
         $messages = [
             'title.required' => 'The Book title field should be entered',
-            'publisher_id.integer' => "You must select publisher"
         ];
+
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => 'error', "errors" => $validator->errors() ]);
         }
 
         $book = new Book();
@@ -71,36 +62,12 @@ class BookController extends Controller
         $book->number_of_copies = $request->number_of_copies;
         $book->date_of_publication = $request->date_of_publication;
         $book->publisher_id = $request->publisher_id;
+
         $book->save();
         if (is_array($request->authors)){
             $book->authors()->sync($request->authors);
         }
-        return redirect()->route('dashboard.books.index')->with('success','Post created successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Book $book)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Book  $book
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Book $book)
-    {
-        //
-        $publishers = Publisher::all();
-        $authors = Author::all();
-        return view("dashboard.books.edit", compact('book', 'publishers', 'authors'));
+        return response(Book::with("authors:id,name")->find($book->id));
     }
 
     /**
@@ -117,20 +84,19 @@ class BookController extends Controller
             'title' => 'required',
             'description' => '',
             'location' => 'nullable',
-            'number_of_copies' => 'integer',
+            'number_of_copies' => 'required',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            'authors' => 'array|nullable'
+            'authors' => 'array'
         ];
 
         $messages = [
             'title.required' => 'The Book title field should be entered',
-            'publisher_id.integer' => "You must select publisher"
         ];
 
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => 'error', "errors" => $validator->errors() ]);
         }
 
         $book->title = $request->title;
@@ -144,7 +110,17 @@ class BookController extends Controller
         if (is_array($request->authors)){
             $book->authors()->sync($request->authors);
         }
-        return redirect()->route('dashboard.books.index');
+        return response(Book::with("authors:id,name")->find($book->id));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Book  $book
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Book $book){
+        return response($book);
     }
 
     /**
@@ -157,6 +133,6 @@ class BookController extends Controller
     {
         //
         $book->delete();
-        return redirect()->route('dashboard.books.index');
+        return response($book);
     }
 }

@@ -6,7 +6,7 @@
     <!-- begin:: Aside -->
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
-            <a href="index.html">
+            <a href="{{route("dashboard.home")}}">
                 <img alt="Logo" src="{{asset("assets/media/logos/logo-light.png")}}" />
             </a>
         </div>
@@ -63,7 +63,7 @@
                         <ul class="kt-menu__subnav">
                             <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Books</span></span></li>
                             <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.books.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">List books</span></a></li>
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="layout/skins/header-dark.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Add book</span></a></li>
+                            <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('dashboard.books.create')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Add book</span></a></li>
                         </ul>
                     </div>
                 </li>
@@ -111,6 +111,10 @@
 													<rect fill="#000000" opacity="0.3" transform="translate(17.825568, 11.945519) rotate(-19.000000) translate(-17.825568, -11.945519) " x="16.3255682" y="2.94551858" width="3" height="18" rx="1" />
 												</g>
 											</svg></span><span class="kt-menu__link-text">Builder</span></a></li>
+
+                <li class="kt-menu__item " aria-haspopup="true"><a target="_blank" href="{{route('logout')}}" class="kt-menu__link ">
+                        <span class="kt-menu__link-text">Logout</span></a></li>
+
 
             </ul>
         </div>

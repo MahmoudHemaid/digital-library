@@ -5,9 +5,11 @@ namespace Database\Factories;
 use App\Models\Book;
 use App\Models\Publisher;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BookFactory extends Factory
 {
+    use SoftDeletes;
     /**
      * The name of the factory's corresponding model.
      *
