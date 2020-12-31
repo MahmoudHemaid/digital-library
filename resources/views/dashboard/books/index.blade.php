@@ -153,8 +153,8 @@
                             <tr class="kt-datatable__row" style="left: 0px;">
                                 <th data-field="title" class="kt-datatable__cell kt-datatable__cell--sort"><span
                                         style="width: 110px;">Title</span></th>
-                                <th data-field="description" class="kt-datatable__cell kt-datatable__cell--sort"><span
-                                        style="width: 110px;">Description</span></th>
+{{--                                <th data-field="description" class="kt-datatable__cell kt-datatable__cell--sort"><span--}}
+{{--                                        style="width: 110px;">Description</span></th>--}}
                                 <th data-field="location" class="kt-datatable__cell kt-datatable__cell--sort"><span
                                         style="width: 110px;">Location</span></th>
                                 <th data-field="number_of_copies"
@@ -165,8 +165,10 @@
                                         style="width: 110px;">Publication date</span></th>
                                 <th data-field="publisher" class="kt-datatable__cell kt-datatable__cell--sort"><span
                                         style="width: 110px;">Publisher</span></th>
-                                <th data-field="publisher" class="kt-datatable__cell kt-datatable__cell--sort"><span
+                                <th data-field="authors" class="kt-datatable__cell kt-datatable__cell--sort"><span
                                         style="width: 110px;">Authors</span></th>
+                                <th data-field="categories" class="kt-datatable__cell kt-datatable__cell--sort"><span
+                                        style="width: 110px;">Categories</span></th>
                                 <th data-field="Actions" data-autohide-disabled="false"
                                     class="kt-datatable__cell kt-datatable__cell--sort"><span style="width: 110px;">Actions</span>
                                 </th>
@@ -179,8 +181,8 @@
                                 <tr data-row="{{$loop->index}}" class="kt-datatable__row" style="left: 0px;">
                                     <td data-field="title" class="kt-datatable__cell"><span
                                             style="width: 110px;">{{$book->title}}</span></td>
-                                    <td data-field="description" class="kt-datatable__cell"><span
-                                            style="width: 110px;">{{$book->description}}</span></td>
+{{--                                    <td data-field="description" class="kt-datatable__cell"><span--}}
+{{--                                            style="width: 110px;">{{$book->description}}</span></td>--}}
                                     <td data-field="location" class="kt-datatable__cell"><span
                                             style="width: 110px;">{{$book->location}}</span></td>
                                     <td data-field="number_of_copies" class="kt-datatable__cell"><span
@@ -189,10 +191,16 @@
                                             style="width: 110px;">{{$book->date_of_publication}}</span></td>
                                     <td data-field="publisher" class="kt-datatable__cell"><span
                                             style="width: 110px;">{{$book->publisher->name}}</span></td>
-                                    <td data-field="publisher" class="kt-datatable__cell"><span
+                                    <td data-field="authors" class="kt-datatable__cell"><span
                                             style="width: 110px;">
                                             @foreach($book->authors as $author)
                                                 {{$author->name.", "}}
+                                            @endforeach
+                                        </span></td>
+                                    <td data-field="categories" class="kt-datatable__cell"><span
+                                            style="width: 110px;">
+                                            @foreach($book->categories as $category)
+                                                {{$category->name.", "}}
                                             @endforeach
                                         </span></td>
                                     <td data-field="Actions" data-autohide-disabled="false"

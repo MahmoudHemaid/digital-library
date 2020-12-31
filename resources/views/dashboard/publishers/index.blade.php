@@ -127,7 +127,7 @@
 											<i class="kt-font-brand flaticon2-line-chart"></i>
 										</span>
                         <h3 class="kt-portlet__head-title">
-                            Books
+                            Publishers
                         </h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
@@ -150,30 +150,40 @@
                         <table class="kt-datatable__table" style="display: block;">
                             <thead class="kt-datatable__head">
                             <tr class="kt-datatable__row" style="left: 0px;">
-                                <th data-field="name" class="kt-datatable__cell kt-datatable__cell--sort"><span
-                                        style="width: 110px;">Name</span></th>
-                                <th data-field="created_at" class="kt-datatable__cell kt-datatable__cell--sort"><span
-                                        style="width: 110px;">Created at</span></th>
-                                <th data-field="updated_at" class="kt-datatable__cell kt-datatable__cell--sort"><span
-                                        style="width: 110px;">Updated at</span></th>
+                                <th data-field="id" class="kt-datatable__cell kt-datatable__cell--sort" style="width: 10%;"><span
+                                    >Id</span></th>
+                                <th data-field="title" class="kt-datatable__cell kt-datatable__cell--sort" style="width: 25%;"><span
+                                    >Name</span></th>
+                                <th data-field="books_count" class="kt-datatable__cell kt-datatable__cell--sort" style="width: 10%;"><span
+                                    >Books count</span></th>
+                                <th data-field="created_at" class="kt-datatable__cell kt-datatable__cell--sort" style="width: 20%;"><span
+                                    >Created at</span></th>
+                                <th data-field="updated_at"
+                                    class="kt-datatable__cell kt-datatable__cell--sort" style="width: 20%;"><span
+                                    >Updated at</span></th>
                                 <th data-field="Actions" data-autohide-disabled="false"
-                                    class="kt-datatable__cell kt-datatable__cell--sort"><span style="width: 110px;">Actions</span>
+                                    class="kt-datatable__cell kt-datatable__cell--sort" style="width: 15%;"><span>Actions</span>
                                 </th>
                             </tr>
                             </thead>
                             <tbody class="kt-datatable__body" style="">
                             @foreach($publishers as $publisher)
                                 <form method="POST" action="{{route('dashboard.publishers.destroy', $publisher)}}">
+
                                     <tr data-row="{{$loop->index}}" class="kt-datatable__row" style="left: 0px;">
-                                        <td data-field="name" class="kt-datatable__cell"><span
-                                                style="width: 110px;">{{$publisher->name}}</span></td>
-                                        <td data-field="description" class="kt-datatable__cell"><span
-                                                style="width: 110px;">{{$publisher->created_at}}</span></td>
-                                        <td data-field="location" class="kt-datatable__cell"><span
-                                                style="width: 110px;">{{$publisher->updated_at}}</span></td>
+                                        <td data-field="id" class="kt-datatable__cell" style="width: 10%;"><span
+                                            >{{$publisher->id}}</span></td>
+                                        <td data-field="name" class="kt-datatable__cell" style="width: 25%;"><span
+                                            >{{$publisher->name}}</span></td>
+                                        <td data-field="books_count" class="kt-datatable__cell" style="width: 10%;"><span
+                                            >{{$publisher->books_count}}</span></td>
+                                        <td data-field="created_at" class="kt-datatable__cell" style="width: 20%;"><span
+                                            >{{$publisher->created_at}}</span></td>
+                                        <td data-field="updated_at" class="kt-datatable__cell" style="width: 20%;"><span
+                                            >{{$publisher->updated_at}}</span></td>
                                         <td data-field="Actions" data-autohide-disabled="false"
-                                            class="kt-datatable__cell">
-                                        <span style="overflow: visible; position: relative; width: 110px;">
+                                            class="kt-datatable__cell" style="width: 15%;">
+                                        <span style="overflow: visible; position: relative; width: 100%">
                                             <a href="{{route("dashboard.publishers.edit", $publisher)}}" title="Edit" class="btn btn-sm btn-clean btn-icon btn-icon-md">
                                                 <i class="la la-edit"></i></a>
                                             @csrf

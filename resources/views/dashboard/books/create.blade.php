@@ -59,6 +59,16 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="exampleSelect2">Categories</label>
+                        <select name="categories[]" multiple="multiple" class="form-control" id="exampleSelect2">
+                            @foreach($categories as $category)
+                                <option
+                                    value="{{$category->id}}" {{is_array(old("categories")) && in_array($category->id, old("categories")) ? "selected" : ""}}
+                                >{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="form-group row">
                         <label for="example-datetime-local-input" class="col-4 col-form-label">Date of publication</label>
                         <div class="col-8">
