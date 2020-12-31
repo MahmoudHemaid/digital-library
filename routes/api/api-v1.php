@@ -22,4 +22,6 @@ Route::namespace('App\Http\Controllers\API')->middleware('auth:api')->group(func
     });
     Route::apiResource('books','BookController');
     Route::apiResource('authors','AuthorController');
+    Route::apiResource('publishers','PublisherController');
+    Route::apiResource('categories','CategoryController');
 });
