@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('register',  "App\Http\Controllers\AuthController@register")->name("register");
 Route::post('register',  "App\Http\Controllers\AuthController@do_register")->name("do_register");
 Route::get('login',  "App\Http\Controllers\AuthController@login")->name("login");
@@ -38,5 +34,5 @@ Route::namespace('App\Http\Controllers\Dashboard')->middleware("auth")->name('da
 });
 
 Route::namespace('App\Http\Controllers\Frontsite')->name('frontsite.')->group(function(){
-    Route::view('/','frontsite.home')->name("home");
+    Route::get('/','FrontsiteController@index')->name("home");
 });

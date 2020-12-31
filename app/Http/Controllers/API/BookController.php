@@ -17,13 +17,13 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $books = Book::orderBy('created_at','desc')->with("authors:id,name")->paginate(20);
+        $books = Book::orderBy('created_at','desc')->with(["authors:id,name", "categories:id,name"])->paginate(20);
 
         return response([
             "count" => $books->count(),
             "limit" => 20,
             "total" => $books->total(),
-            "data" => $books
+            "data" => $books->items()
         ]);
     }
 
@@ -42,7 +42,8 @@ class BookController extends Controller
             'number_of_copies' => 'required',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            "authors" => 'array'
+            "authors" => 'array|nullable',
+            'categories' => 'array|nullable',
         ];
 
 
@@ -67,6 +68,9 @@ class BookController extends Controller
         if (is_array($request->authors)){
             $book->authors()->sync($request->authors);
         }
+        if (is_array($request->categories)){
+            $book->categories()->sync($request->categories);
+        }
         return response(Book::with("authors:id,name")->find($book->id));
     }
 
@@ -87,7 +91,8 @@ class BookController extends Controller
             'number_of_copies' => 'required',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            'authors' => 'array'
+            'authors' => 'array|nullable',
+            'categories' => 'array|nullable',
         ];
 
         $messages = [
@@ -108,7 +113,10 @@ class BookController extends Controller
 
         $book->save();
         if (is_array($request->authors)){
-            $book->authors()->sync($request->authors);
+            $book->categories()->sync($request->authors);
+        }
+        if (is_array($request->categories)){
+            $book->categories()->sync($request->categories);
         }
         return response(Book::with("authors:id,name")->find($book->id));
     }
@@ -120,7 +128,7 @@ class BookController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Book $book){
-        return response($book);
+        return response(Book::with(["authors:id,name", "categories:id,name"])->find($book->id));
     }
 
     /**

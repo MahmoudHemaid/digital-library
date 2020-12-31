@@ -21,4 +21,5 @@ Route::namespace('App\Http\Controllers\API')->middleware('auth:api')->group(func
         return $request->user();
     });
     Route::apiResource('books','BookController');
+    Route::apiResource('authors','AuthorController');
 });

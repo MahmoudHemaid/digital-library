@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Publisher;
@@ -17,17 +17,12 @@ class PublisherController extends Controller
     public function index()
     {
         $publishers = Publisher::withCount("books")->orderBy('created_at','desc')->paginate(10);
-        return view("dashboard.publishers.index", compact('publishers'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("dashboard.publishers.create");
+        return response([
+            "count" => $publishers->count(),
+            "limit" => 10,
+            "total" => $publishers->total(),
+            "data" => $publishers->items()
+        ]);
     }
 
     /**
@@ -48,14 +43,14 @@ class PublisherController extends Controller
 
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $publisher = new Publisher();
         $publisher->name = $request->name;
         $publisher->save();
 
-        return redirect()->route('dashboard.publishers.index')->with('success','Publisher created successfully');
+        return response($publisher);
     }
 
     /**
@@ -66,19 +61,8 @@ class PublisherController extends Controller
      */
     public function show(Publisher $publisher)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Publisher  $publisher
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Publisher $publisher)
-    {
-        //
-        return view("dashboard.publishers.edit", compact('publisher'));
+        return response($publisher);;
     }
 
     /**
@@ -98,15 +82,15 @@ class PublisherController extends Controller
 
         ];
 
-        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $publisher->name = $request->name;
         $publisher->save();
 
-        return redirect()->route('dashboard.publishers.index')->with('success','Publisher updated successfully');
+        return response($publisher);
     }
 
     /**
@@ -118,6 +102,6 @@ class PublisherController extends Controller
     public function destroy(Publisher $publisher)
     {
         $publisher->delete();
-        return redirect()->route('dashboard.publishers.index')->with('success','Publisher deleted successfully');;
+        return response($publisher);;
     }
 }

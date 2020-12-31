@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -17,17 +17,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::withCount("books")->orderBy('created_at','desc')->paginate(10);
-        return view("dashboard.categories.index", compact("categories"));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("dashboard.categories.create");
+        return response([
+            "count" => $categories->count(),
+            "limit" => 10,
+            "total" => $categories->total(),
+            "data" => $categories->items()
+        ]);
     }
 
     /**
@@ -48,14 +43,14 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $category = new Category();
         $category->name = $request->name;
         $category->save();
 
-        return redirect()->route('dashboard.categories.index')->with('success','Category created successfully');
+        return response($category);
     }
 
     /**
@@ -66,19 +61,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
-    {
-        //
-        return view("dashboard.categories.edit", compact('category'));
+        return response($category);;
     }
 
     /**
@@ -98,15 +82,15 @@ class CategoryController extends Controller
 
         ];
 
-        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $category->name = $request->name;
         $category->save();
 
-        return redirect()->route('dashboard.categories.index')->with('success','Category updated successfully');
+        return response($category);
     }
 
     /**
@@ -118,6 +102,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('dashboard.categories.index')->with('success','Category deleted successfully');;
+        return response($category);;
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\BookLoan;
 use App\Models\Publisher;
 use App\Models\BookAuthor;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,7 +35,8 @@ class BookController extends Controller
         //
         $publishers = Publisher::all();
         $authors = Author::all();
-        return view("dashboard.books.create", compact('publishers', 'authors'));
+        $categories = Category::all();
+        return view("dashboard.books.create", compact('publishers', 'authors', 'categories'));
     }
 
     /**
@@ -52,7 +54,8 @@ class BookController extends Controller
             'number_of_copies' => 'integer',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            'authors' => 'array|nullable'
+            'authors' => 'array|nullable',
+            'categories' => 'array|nullable',
         ];
 
         $messages = [
@@ -74,6 +77,9 @@ class BookController extends Controller
         $book->save();
         if (is_array($request->authors)){
             $book->authors()->sync($request->authors);
+        }
+        if (is_array($request->categories)){
+            $book->categories()->sync($request->categories);
         }
         return redirect()->route('dashboard.books.index')->with('success','Post created successfully');
     }
@@ -100,7 +106,8 @@ class BookController extends Controller
         //
         $publishers = Publisher::all();
         $authors = Author::all();
-        return view("dashboard.books.edit", compact('book', 'publishers', 'authors'));
+        $categories = Category::all();
+        return view("dashboard.books.edit", compact('book', 'publishers', 'authors', 'categories'));
     }
 
     /**
@@ -120,7 +127,8 @@ class BookController extends Controller
             'number_of_copies' => 'integer',
             'date_of_publication' => 'required|date',
             'publisher_id' => 'required|integer',
-            'authors' => 'array|nullable'
+            'authors' => 'array|nullable',
+            'categories' => 'array|nullable',
         ];
 
         $messages = [
@@ -144,7 +152,10 @@ class BookController extends Controller
         if (is_array($request->authors)){
             $book->authors()->sync($request->authors);
         }
-        return redirect()->route('dashboard.books.index');
+        if (is_array($request->categories)){
+            $book->categories()->sync($request->categories);
+        }
+        return redirect()->route('dashboard.books.index')->with('success','Book updated successfully');;
     }
 
     /**
@@ -157,6 +168,6 @@ class BookController extends Controller
     {
         //
         $book->delete();
-        return redirect()->route('dashboard.books.index');
+        return redirect()->route('dashboard.books.index')->with('success','Book deleted successfully');;
     }
 }

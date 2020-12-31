@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Author;
@@ -17,17 +17,12 @@ class AuthorController extends Controller
     public function index()
     {
         $authors = Author::withCount("books")->orderBy('created_at','desc')->paginate(10);
-        return view("dashboard.authors.index", compact("authors"));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view("dashboard.authors.create");
+        return response([
+            "count" => $authors->count(),
+            "limit" => 10,
+            "total" => $authors->total(),
+            "data" => $authors->items()
+        ]);
     }
 
     /**
@@ -48,14 +43,14 @@ class AuthorController extends Controller
 
         $validator = Validator::make($request->all(),$rules,$messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $author = new Author();
         $author->name = $request->name;
         $author->save();
 
-        return redirect()->route('dashboard.authors.index')->with('success','Author created successfully');
+        return response($author);
     }
 
     /**
@@ -66,19 +61,8 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Author $author)
-    {
-        //
-        return view("dashboard.authors.edit", compact('author'));
+        return response($author);;
     }
 
     /**
@@ -98,15 +82,15 @@ class AuthorController extends Controller
 
         ];
 
-        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()){
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return response(["status" => "error", "errors" => $validator->errors()]);
         }
 
         $author->name = $request->name;
         $author->save();
 
-        return redirect()->route('dashboard.authors.index')->with('success','Author updated successfully');
+        return response($author);
     }
 
     /**
@@ -118,6 +102,6 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->delete();
-        return redirect()->route('dashboard.authors.index')->with('success','Author deleted successfully');;
+        return response($author);;
     }
 }
